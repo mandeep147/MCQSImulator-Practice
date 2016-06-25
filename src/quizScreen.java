@@ -92,7 +92,8 @@ public class quizScreen extends settings implements ActionListener {
 			quiz(count--);
 	    }
 	    else if(e.getSource()==finish){
-	    	//call result.java
+	    	result result=new result();
+	    	result.displayResult();
 	    }
 	}
 	public void displayButton(){

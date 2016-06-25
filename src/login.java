@@ -9,6 +9,7 @@ public class login extends settings implements ActionListener{
 	private JLabel mail,password;
 	String user="root",pass="root",database="mcq",errorMessage="fill all the fields",loginError="login failed";
 	int port=3306;
+	
 	void loginScreen(){		
 		frame("Login");
 		
