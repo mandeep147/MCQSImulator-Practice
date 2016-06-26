@@ -8,8 +8,8 @@ public class result extends settings implements ActionListener{
 	void displayResult(){
 		frame("Result");
 		
-		exit=new JButton("Exit");
-		home=new JButton("Home");
+		exit = new JButton("Exit");
+		home = new JButton("Home");
 		
 		exit.addActionListener(this);
 		home.addActionListener(this);
@@ -25,11 +25,11 @@ public class result extends settings implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==exit){
+		if(e.getSource() == exit){
 			Mcq.mainFrame.dispose();
 		}
-		else if(e.getSource()==home){
-			instructions instr=new instructions();
+		else if(e.getSource() == home){
+			instructions instr = new instructions();
 			instr.showInstruction();
 		}
 	}

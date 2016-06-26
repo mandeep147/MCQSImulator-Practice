@@ -5,27 +5,27 @@ import javax.swing.*;
 
 public class quizScreen extends settings implements ActionListener {
 	String ques,ans, opta, optb, optc,optd;
-	int score,count=1,var=5, port=3306;
+	int score,count = 1,var = 5, port = 3306;
 	int course;
 	private JRadioButton[] choice;
 	private JLabel test;
 	private JButton next,back,finish;
 	private ButtonGroup group ;
-	String user="root",pass="root",database="mcq";
+	String user = "root", pass = "root", database = "mcq";
 	public quizScreen(String cid) {
 		// TODO Auto-generated constructor stub
-		course=Integer.parseInt(cid);
+		course = Integer.parseInt(cid);
 		quiz(course);
 	}
 
 	void quiz(int qid){
 		frame("Quiz");
 
-		test=new JLabel();
-		next=new JButton("Next");
-		back=new JButton("Back");
-		finish=new JButton("Finish");
-		choice=new JRadioButton[var-1];
+		test = new JLabel();
+		next = new JButton("Next");
+		back = new JButton("Back");
+		finish = new JButton("Finish");
+		choice = new JRadioButton[var-1];
 		group = new ButtonGroup();
 		
 		next.addActionListener(this);
@@ -52,19 +52,19 @@ public class quizScreen extends settings implements ActionListener {
 				test.setText("<html>"+ques+"<br></html>");
 				Mcq.controlPanel.add(test);
 				
-				choice[0]= new JRadioButton(opta);
-				choice[1]= new JRadioButton(optb);
-				choice[2]= new JRadioButton(optc);
-				choice[3]= new JRadioButton(optd);
+				choice[0] = new JRadioButton(opta);
+				choice[1] = new JRadioButton(optb);
+				choice[2] = new JRadioButton(optc);
+				choice[3] = new JRadioButton(optd);
 				
 				displayButton();
 		
 				//count++;
 			}		
-			for(int i=0;i<var-1;i++)
+			for(int i=0; i < var-1; i++)
 				Mcq.controlPanel.add(choice[i]);
 			
-			for(int i=0;i<var-1;i++)
+			for(int i = 0; i < var-1; i++)
 				group.add(choice[i]);
 		
 			choice[0].setBounds(200, 250, 400, 50);
@@ -85,25 +85,25 @@ public class quizScreen extends settings implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e) {
 	    if(e.getSource() == next){
-	    	if(count<=var)
+	    	if(count <= var)
 				quiz(count++);
 	    }
-	    else if(e.getSource()==back){
+	    else if(e.getSource() == back){
 			quiz(count--);
 	    }
-	    else if(e.getSource()==finish){
-	    	result result=new result();
+	    else if(e.getSource() == finish){
+	    	result result = new result();
 	    	result.displayResult();
 	    }
 	}
 	public void displayButton(){
-		if(count==1)
+		if(count == 1)
 			Mcq.controlPanel.add(next);
-		if(count>1&&count<var){
+		if(count > 1 && count < var){
 			Mcq.controlPanel.add(back);
 			Mcq.controlPanel.add(next);
 		}
-		if(count==var){
+		if(count == var){
 			Mcq.controlPanel.add(back);
 			Mcq.controlPanel.add(finish);
 		}

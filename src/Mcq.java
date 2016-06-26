@@ -10,14 +10,14 @@ public class Mcq extends settings implements ActionListener{
 		createGUI();
 	}
 	public static void main(String []args){
-		Mcq mainScreen=new Mcq();
+		Mcq mainScreen = new Mcq();
 		mainScreen.welcome();
 	}
 	
 	//display properties of frame
 	private static void createGUI(){		
 		
-		mainFrame= new JFrame("MCQ");
+		mainFrame = new JFrame("MCQ");
 		mainFrame.setSize(800,800);
 	
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -33,8 +33,8 @@ public class Mcq extends settings implements ActionListener{
 		controlPanel = new JPanel();
 	    controlPanel.setLayout(null);
 	    
-		student=new JButton("Student");
-		admin=new JButton("Admin");
+		student = new JButton("Student");
+		admin = new JButton("Admin");
 		
 		student.addActionListener(this);
 		admin.addActionListener(this);
@@ -51,10 +51,10 @@ public class Mcq extends settings implements ActionListener{
 	}
 	public void actionPerformed(ActionEvent e) {
 	    if(e.getSource() == student){
-			login login=new login();
+			login login = new login();
 			login.loginScreen();
 	    }
-	    else if(e.getSource()== admin){
+	    else if(e.getSource() == admin){
 	    	//add code to handle functionality of admin
 	    }
 	}

@@ -7,20 +7,20 @@ public class login extends settings implements ActionListener{
 	private JPasswordField passwd;
 	private JButton forgot,submit;
 	private JLabel mail,password;
-	String user="root",pass="root",database="mcq",errorMessage="fill all the fields",loginError="login failed";
-	int port=3306;
+	String user = "root", pass = "root", database = "mcq", errorMessage = "fill all the fields", loginError = "login failed";
+	int port = 3306;
 	
 	void loginScreen(){		
 		frame("Login");
 		
-		emailId=new JTextField();
-		passwd=new JPasswordField();
+		emailId = new JTextField();
+		passwd = new JPasswordField();
 		
-		mail=new JLabel("EMail-ID: ");
-		password=new JLabel("Password: ");
+		mail = new JLabel("EMail-ID: ");
+		password = new JLabel("Password: ");
 		 		
-		forgot=new JButton("Forgot Password");
-		submit=new JButton("Submit");
+		forgot = new JButton("Forgot Password");
+		submit = new JButton("Submit");
 		
 		forgot.addActionListener(this);
 //verify the credentials first if correct then call courses.listcourses else pop up error msg
@@ -41,7 +41,6 @@ public class login extends settings implements ActionListener{
 		Mcq.controlPanel.add(passwd);
 		Mcq.controlPanel.add(forgot);
 		Mcq.controlPanel.add(submit);
-		
 				
 		Mcq.mainFrame.add(Mcq.controlPanel);
 		screenDisplay();
@@ -49,19 +48,19 @@ public class login extends settings implements ActionListener{
 	public void displayData(){
 		Connection con = null;  
 		
-		String username="mndpkaur14@gmail.com";
-		String passid="mandeepkaur";
+		String username = "mndpkaur14@gmail.com";
+		String passid = "mandeepkaur";
 /**if text fields are empty or not; if yes then verify credentials 
  * from database else prompt to enter both fields first
 */
-		if((username.length()!=0) && (passid.length()!=0)){
+		if((username.length()!= 0) && (passid.length()!= 0)){
 			try {
 				con= DriverManager.getConnection("jdbc:mysql://localhost:"+port+"/"+database,user,pass);
 				Statement stmt = (Statement) con.createStatement();
 				String query = "select * from login where email='"+username+"' and password='"+passid+"'";				
 				ResultSet rs = stmt.executeQuery(query);
 				if(rs.next()){
-					instructions instr=new instructions();
+					instructions instr = new instructions();
 					instr.showInstruction();
 				}
 				else
@@ -75,10 +74,10 @@ public class login extends settings implements ActionListener{
 	}//end of displayData()
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==forgot){
+		if(e.getSource() == forgot){
 			//add code to send email for resetting the password
 		}
-		else if(e.getSource()==submit){
+		else if(e.getSource() == submit){
 			displayData();
 		}
 	}

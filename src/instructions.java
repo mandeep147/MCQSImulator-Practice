@@ -8,15 +8,15 @@ import java.io.FileReader;
 public class instructions extends settings implements ActionListener {
 	private JButton start;
 	private JLabel instruct;
-	String text="";
-	String savetext="";	
+	String text = "";
+	String savetext = "";	
 
 	void showInstruction(){
 		frame("Instructions");
 
 		readDataFromFile();
 		
-		start=new JButton("Start Test");
+		start = new JButton("Start Test");
 		start.addActionListener(this);
 		
 		Font font = new Font("Courier", Font.PLAIN,22);
@@ -35,15 +35,15 @@ public class instructions extends settings implements ActionListener {
 	void readDataFromFile(){
 		File file = new File("D:\\instructions.txt");
 		BufferedReader reader = null;
-		instruct=new JLabel();
+		instruct = new JLabel();
 		
 		try {
 			reader = new BufferedReader(new FileReader(file));
 			            		
 			while ((text = reader.readLine()) != null) {
-				savetext+=text;
+				savetext+= text;
 			}
-			String finalStr=convertToMultiline(savetext);
+			String finalStr = convertToMultiline(savetext);
 			System.out.println(finalStr);
 			
 			instruct.setText(finalStr);
@@ -59,7 +59,7 @@ public class instructions extends settings implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		courses co=new courses();
+		courses co = new courses();
 		co.listCourses();
 	}
 }
