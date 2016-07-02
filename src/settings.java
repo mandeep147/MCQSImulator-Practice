@@ -1,6 +1,8 @@
 
 public class settings {
-	
+		final String email = "mndpkaur14@gmail.com";
+		final String passwordSign = "mandipkaur14";
+		
 		void frame(String title){
 			Mcq.mainFrame.setTitle(title);
 			Mcq.controlPanel.removeAll();
@@ -14,6 +16,10 @@ public class settings {
 		}
 		
 		void addComponents(){
+			
+		}
+		
+		void email(){
 			
 		}
 }

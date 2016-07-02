@@ -1,13 +1,23 @@
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import java.sql.*;
 import java.awt.event.*;
+import java.util.Properties;
+import java.util.UUID;
 
 public class login extends settings implements ActionListener{
 	private JTextField emailId;
 	private JPasswordField passwd;
 	private JButton forgot,submit;
 	private JLabel mail,password;
-	String user = "root", pass = "root", database = "mcq", errorMessage = "fill all the fields", loginError = "login failed";
+	private String uuid,username,passid;
+	private String user = "root", pass = "root", database = "mcq", errorMessage = "fill all the fields", loginError = "login failed";
 	int port = 3306;
 	
 	void loginScreen(){		
@@ -48,8 +58,8 @@ public class login extends settings implements ActionListener{
 	public void displayData(){
 		Connection con = null;  
 		
-		String username = "mndpkaur14@gmail.com";
-		String passid = "mandeepkaur";
+		username = "mndpkaur14@gmail.com";
+		passid = "mandeepkaur";
 /**if text fields are empty or not; if yes then verify credentials 
  * from database else prompt to enter both fields first
 */
@@ -76,9 +86,42 @@ public class login extends settings implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == forgot){
 			//add code to send email for resetting the password
+			uuid = UUID.randomUUID().toString();
+			username = emailId.getText();
+			System.out.println(uuid);
+			sendEmail();
 		}
 		else if(e.getSource() == submit){
 			displayData();
 		}
 	}
+	
+	public void sendEmail(){
+		String usernameEmail = email;
+		String passwordEmail = passwordSign; 
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.port", "587");
+		Session session = Session.getInstance(props,
+		  new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(usernameEmail, passwordEmail);
+			}		  });
+		try {
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("mndpkaur14@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(username));
+			message.setSubject("Forgot Passowrd");
+			message.setText("Copy following code,"
+				+ "\n\n to reset password"+ uuid);
+			Transport.send(message);
+			System.out.println("Done");
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 }//end of class
