@@ -1,24 +1,18 @@
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import java.sql.*;
 import java.awt.event.*;
-import java.util.Properties;
 import java.util.UUID;
 
 public class login extends settings implements ActionListener{
-	private JTextField emailId;
+	
+	private JTextField emailId, resetCode, newPassword;
 	private JPasswordField passwd;
-	private JButton forgot,submit;
-	private JLabel mail,password;
-	private String uuid,username,passid;
+	private JButton forgot,submit, resetButton;
+	private JLabel mail,password, reset, forgotPassword;
+	private String uuid,username,passid, newpassid, resetError="incorrect code";
 	private String user = "root", pass = "root", database = "mcq", errorMessage = "fill all the fields", loginError = "login failed";
 	int port = 3306;
+	Connection con;
 	
 	void loginScreen(){		
 		frame("Login");
@@ -55,15 +49,17 @@ public class login extends settings implements ActionListener{
 		Mcq.mainFrame.add(Mcq.controlPanel);
 		screenDisplay();
 	}
+	@SuppressWarnings("deprecation")
 	public void displayData(){
-		Connection con = null;  
-		
 		username = "mndpkaur14@gmail.com";
-		passid = "mandeepkaur";
-/**if text fields are empty or not; if yes then verify credentials 
- * from database else prompt to enter both fields first
-*/
-		if((username.length()!= 0) && (passid.length()!= 0)){
+		//passid = "mandeepkaur";
+		passid = passwd.getText();
+		System.out.println(passid);
+
+		if(username.isEmpty() || passid.isEmpty()){
+			JOptionPane.showMessageDialog(Mcq.controlPanel, loginError);
+		}
+		else if((username.length()!= 0) && (passid.length()!= 0)){
 			try {
 				con= DriverManager.getConnection("jdbc:mysql://localhost:"+port+"/"+database,user,pass);
 				Statement stmt = (Statement) con.createStatement();
@@ -82,46 +78,89 @@ public class login extends settings implements ActionListener{
 		else
 			JOptionPane.showMessageDialog(Mcq.controlPanel,errorMessage,"login",JOptionPane.WARNING_MESSAGE);		
 	}//end of displayData()
+
+	public void setPassword(){
+		frame("Reset Password");
+		
+		reset = new JLabel("Reset password code");
+		forgotPassword = new JLabel("New Password");
+		
+		resetButton = new JButton("Confirm");
+		
+		resetCode = new JTextField();
+		newPassword = new JTextField();
+		
+		resetButton.addActionListener(this);
+		reset.setBounds(200, 100, 150, 50);
+		forgotPassword.setBounds(200, 250, 150, 50);
+		
+		resetCode.setBounds(400, 200, 500, 50);
+		newPassword.setBounds(400, 320, 500, 50);
+
+		resetButton.setBounds(300, 460, 250, 50);
+		
+		Mcq.controlPanel.add(reset);
+		Mcq.controlPanel.add(forgotPassword);
+		Mcq.controlPanel.add(resetCode);
+		Mcq.controlPanel.add(newPassword);
+		Mcq.controlPanel.add(resetButton);
+				
+		Mcq.mainFrame.add(Mcq.controlPanel);
+		screenDisplay();
+
+	}
+	
+	public void resetPassword() throws SQLException{
+		String codeConfirm = resetCode.getText();
+		newpassid = newPassword.getText();
+		System.out.println(newpassid+ "   "+ username);
+		if(codeConfirm.equals(uuid)){
+			PreparedStatement preparedStatement = null;
+			try {
+				con= DriverManager.getConnection("jdbc:mysql://localhost:"+port+"/"+database+"?useSSL=false",user,pass);
+			
+				String queryUpdate = "update login set password = ? where email = ?";
+				preparedStatement = con.prepareStatement(queryUpdate);
+				preparedStatement.setString(1, newpassid);
+				preparedStatement.setString(2, username);
+				preparedStatement.executeUpdate();
+				
+				JOptionPane.showMessageDialog(Mcq.controlPanel, "Updated Passowrd");
+				loginScreen();
+				
+				
+			}catch(Exception se){
+			      se.printStackTrace();
+			   }//end of try-catch
+			finally {
+				preparedStatement.close();
+				con.close();
+			}
+		}
+		else{
+			JOptionPane.showMessageDialog(Mcq.controlPanel, resetError);
+		}		
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == forgot){
-			//add code to send email for resetting the password
 			uuid = UUID.randomUUID().toString();
-			username = emailId.getText();
-			System.out.println(uuid);
-			sendEmail();
+			//username = emailId.getText();
+			username = "mndpkaur14@gmail.com";
+			Email send = new Email();
+			send.sendEmail(username, uuid);
+			setPassword();
 		}
 		else if(e.getSource() == submit){
 			displayData();
 		}
-	}
-	
-	public void sendEmail(){
-		String usernameEmail = email;
-		String passwordEmail = passwordSign; 
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-		Session session = Session.getInstance(props,
-		  new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(usernameEmail, passwordEmail);
-			}		  });
-		try {
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("mndpkaur14@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(username));
-			message.setSubject("Forgot Passowrd");
-			message.setText("Copy following code,"
-				+ "\n\n to reset password"+ uuid);
-			Transport.send(message);
-			System.out.println("Done");
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+		else if(e.getSource() == resetButton){
+			try {
+				resetPassword();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
-	}
-	
+	}// end of function	
 }//end of class
