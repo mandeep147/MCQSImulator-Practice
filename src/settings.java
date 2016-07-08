@@ -2,7 +2,7 @@
 public class settings {
 		final String email = "mndpkaur14@gmail.com";
 //specify password
-		final String passwordSign = "";
+		final String passwordSign = "Mandipkaur14";
 		
 		void frame(String title){
 			Mcq.mainFrame.setTitle(title);

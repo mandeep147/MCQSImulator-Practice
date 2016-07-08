@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public class login extends settings implements ActionListener{
 	
-	private JTextField emailId, resetCode, newPassword;
-	private JPasswordField passwd;
+	private JTextField emailId, resetCode ;
+	private JPasswordField passwd, newPassword;
 	private JButton forgot,submit, resetButton;
 	private JLabel mail,password, reset, forgotPassword;
 	private String uuid,username,passid, newpassid, resetError="incorrect code";
@@ -88,7 +88,7 @@ public class login extends settings implements ActionListener{
 		resetButton = new JButton("Confirm");
 		
 		resetCode = new JTextField();
-		newPassword = new JTextField();
+		newPassword = new JPasswordField();
 		
 		resetButton.addActionListener(this);
 		reset.setBounds(200, 100, 150, 50);
@@ -114,7 +114,13 @@ public class login extends settings implements ActionListener{
 		String codeConfirm = resetCode.getText();
 		newpassid = newPassword.getText();
 		System.out.println(newpassid+ "   "+ username);
-		if(codeConfirm.equals(uuid)){
+		if(codeConfirm.isEmpty() || newpassid.isEmpty()){
+			JOptionPane.showMessageDialog(Mcq.controlPanel, "Mandatory Fields.");
+		}
+		else if(!(codeConfirm.equals(uuid)) ){
+			JOptionPane.showMessageDialog(Mcq.controlPanel, resetError);
+		}
+		else{
 			PreparedStatement preparedStatement = null;
 			try {
 				con= DriverManager.getConnection("jdbc:mysql://localhost:"+port+"/"+database+"?useSSL=false",user,pass);
@@ -136,9 +142,6 @@ public class login extends settings implements ActionListener{
 				preparedStatement.close();
 				con.close();
 			}
-		}
-		else{
-			JOptionPane.showMessageDialog(Mcq.controlPanel, resetError);
 		}		
 	}
 	@Override
